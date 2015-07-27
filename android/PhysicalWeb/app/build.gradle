@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "physical_web.org.physicalweb"
+        minSdkVersion 19
+        targetSdkVersion 22
+        versionCode 13
+        versionName "0.1.854"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    if(new File("signing.properties").exists()) {
+        Properties signingProperties = new Properties()
+        signingProperties.load(new FileInputStream(new File('signing.properties')))
+
+        signingConfigs {
+            release {
+                storeFile new File(signingProperties['storeFile'])
+                storePassword signingProperties['storePassword']
+                keyAlias signingProperties['keyAlias']
+                keyPassword signingProperties['keyPassword']
+            }
+        }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}
+
+repositories{
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile 'com.android.volley:volley@aar'
+    compile 'org.uribeacon:uribeacon-library-release@aar'
+
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.google.api-client:google-api-client:1.19.0'
+    compile 'com.google.apis:google-api-services-urlshortener:v1-rev33-1.19.0'
+    compile 'com.google.http-client:google-http-client:1.19.0'
+    compile 'com.google.http-client:google-http-client-android:1.19.0'
+}
